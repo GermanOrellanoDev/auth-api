@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import healthRoutes from "./routes/health.routes";
+import authRoutes from "./modules/auth/auth.routes";
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(morgan("dev"));
 
 //routes
 app.use("/api", healthRoutes);
+app.use("/api/auth", authRoutes);
 
 //health endpoint
 app.get("/", (req, res) => {
