@@ -6,6 +6,8 @@ export interface IUser {
   password: string;
   role: "ADMIN" | "USER";
   isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema<IUser>(
