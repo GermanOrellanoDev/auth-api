@@ -7,6 +7,7 @@ export async function authenticate(
   res: Response,
   next: NextFunction
 ) {
+  console.log("🔐 authenticate start");
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -29,12 +30,11 @@ export async function authenticate(
     if (!user || !user.isActive) {
       return res.status(401).json({ error: "User not found or inactive" });
     }
-
     req.user = {
       userId: payload.userId,
       role: payload.role,
     };
-
+    console.log("✅ authenticate OK", req.user);
     next();
   } catch (error) {
     next(error);
