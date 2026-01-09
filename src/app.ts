@@ -6,6 +6,8 @@ import authRoutes from "./modules/auth/auth.routes";
 import { errorHandler } from "./middlewares/error.middleware";
 import usersRoutes from "./modules/users/user.routes";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
+import * as openapiDoc from "./docs/openapi.json";
 
 const app = express();
 
@@ -20,6 +22,9 @@ app.use(cookieParser());
 app.use("/api", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoutes);
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(openapiDoc));
+
 app.use(errorHandler);
 
 //health endpoint
