@@ -37,7 +37,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
     const { user, token, refreshToken } = await loginUser(email, password);
-    const expiresEnv = process.env.REFRESH_TOKEN_EXPIRES || "7d";
+    const expiresEnv = process.env.JWT_REFRESH_EXPIRES_IN || "7d";
     const expiresAt = expiresInToDate(expiresEnv);
 
     res.cookie(
@@ -130,7 +130,7 @@ export const refresh = async (req: Request, res: Response) => {
       role: user.role,
     });
 
-    const expiresEnv = process.env.REFRESH_TOKEN_EXPIRES || "7d";
+    const expiresEnv = process.env.JWT_REFRESH_EXPIRES_IN || "7d";
     const expiresAt = expiresInToDate(expiresEnv);
     await createRefreshToken(user._id.toString(), newRefreshToken, expiresAt);
 

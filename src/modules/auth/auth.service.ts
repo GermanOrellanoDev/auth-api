@@ -32,7 +32,7 @@ export const registerUser = async (
     role: user.role,
   });
 
-  const expiresEnv = process.env.REFRESH_TOKEN_EXPIRES || "7d";
+  const expiresEnv = process.env.JWT_REFRESH_EXPIRES_IN || "7d";
   const expiresAt = expiresInToDate(expiresEnv);
   await createRefreshToken(user._id.toString(), refreshToken, expiresAt);
 
@@ -62,7 +62,7 @@ export const loginUser = async (email: string, password: string) => {
     role: user.role,
   });
 
-  const expiresEnv = process.env.REFRESH_TOKEN_EXPIRES || "7d";
+  const expiresEnv = process.env.JWT_REFRESH_EXPIRES_IN || "7d";
   const expiresAt = expiresInToDate(expiresEnv);
   await createRefreshToken(user._id.toString(), refreshToken, expiresAt);
 
