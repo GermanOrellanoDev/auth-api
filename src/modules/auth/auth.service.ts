@@ -1,6 +1,8 @@
 import { User } from "../users/user.model";
 import { hashPassword, comparePassword } from "../../utils/hash";
-import { generateToken } from "../../utils/jwt";
+import { generateRefreshToken, generateToken } from "../../utils/jwt";
+import { createRefreshToken } from "./refresh.service";
+import { expiresInToDate } from "../../utils/time";
 
 export const registerUser = async (
   name: string,
@@ -25,7 +27,16 @@ export const registerUser = async (
     role: user.role,
   });
 
-  return { user, token };
+  const refreshToken = generateRefreshToken({
+    userId: user._id.toString(),
+    role: user.role,
+  });
+
+  const expiresEnv = process.env.REFRESH_TOKEN_EXPIRES || "7d";
+  const expiresAt = expiresInToDate(expiresEnv);
+  await createRefreshToken(user._id.toString(), refreshToken, expiresAt);
+
+  return { user, token, refreshToken };
 };
 
 export const loginUser = async (email: string, password: string) => {
@@ -46,5 +57,14 @@ export const loginUser = async (email: string, password: string) => {
     role: user.role,
   });
 
-  return { user, token };
+  const refreshToken = generateRefreshToken({
+    userId: user._id.toString(),
+    role: user.role,
+  });
+
+  const expiresEnv = process.env.REFRESH_TOKEN_EXPIRES || "7d";
+  const expiresAt = expiresInToDate(expiresEnv);
+  await createRefreshToken(user._id.toString(), refreshToken, expiresAt);
+
+  return { user, token, refreshToken };
 };
